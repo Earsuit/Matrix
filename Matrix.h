@@ -3,6 +3,10 @@
   will lead to empty matrix, therefore, one should check whether the matrix is
   empty after calculation.
 
+  This library is easy to use, I have overloaded operators, one can use +,*,/,-
+  as they want, but there is no definition for using matrix division (like A/B).
+  One should use the inverse function inv() instead. 
+
   To get a better performance, it's recommended to use /=, *=, -= and += if you
   have A = A*B, A = A+B or A = A/b (b is a scalar). If you have A = B*C,
   the times(const Matrix & B,const Matrix & C) function gives faster performance.
@@ -27,8 +31,9 @@ class Matrix
         int _column;
         Any** _entity;
         Matrix();
-        //ini stands for the initial value, r is row, c is column
+        //ini stands for the initial value of all elements, r is row, c is column
         Matrix(int r,int c, int ini=0);
+        //copy constructor, one can directly use the "=" operator like A=B
         Matrix(const Matrix & m);
         //for a 2d array, you need to cast it to (Any*) type, see example for
         //more information
@@ -469,7 +474,7 @@ void Matrix<Any>::show(int decimal)
 {
     if(decimal<0)
         decimal = 0;
-    
+
 	for(int i=0; i<_row; i++)
 	{
 	    Serial.print("[");
