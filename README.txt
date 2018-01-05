@@ -3,7 +3,7 @@
   empty after calculation.
   
   This library is easy to use, I have overloaded operators, one can use +,*,/,-
-  as they want, but there is no definition for using matrix division (like A/B).
+  as they want, but there is no definition for matrix division (like A/B).
   One should use the inverse function inv() instead. 
   
   To get a better performance, it's recommended to use /=, *=, -= and += if you
