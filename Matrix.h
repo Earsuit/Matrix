@@ -467,6 +467,9 @@ void Matrix<Any>::swapRow(int i,int j){
 template <class Any>
 void Matrix<Any>::show(int decimal)
 {
+    if(decimal<0)
+        decimal = 0;
+    
 	for(int i=0; i<_row; i++)
 	{
 	    Serial.print("[");
