@@ -5,19 +5,23 @@
 
   This library is easy to use, I have overloaded operators, one can use +,*,/,-,
   =,==,!= as they want, but there is no definition for matrix division (like A/B).
-  One should use the inverse function inv() instead. 
+  One should use the inverse function inv() instead.
 
   To get a better performance, it's recommended to use /=, *=, -= and += if you
   have A = A*B, A = A+B or A = A/b (b is a scalar). If you have A = B*C,
-  the times(const Matrix & B,const Matrix & C) function gives faster performance.
+  the A.times(const Matrix & B,const Matrix & C) function gives faster performance.
 
   However, using this library to do matrix calculation is not very
   efficient, if you have a time-critical sketch, it would be better to write your
   own code which is optimised for your project.
 
+  The transpose() and inv() functions are static functions, which should use
+  Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
+  type you used to create the matrix.
+
   Created by Yudi Ren, Jan 05, 2018.
   renyudicn@outlook.com
-  Version 0.1
+  Version 0.2
 */
 
 #ifndef MATRIX_H
@@ -43,26 +47,30 @@ class Matrix
         */
         Matrix(int r,int c, char type);
         ~Matrix();
-        Matrix operator*(const Matrix & A);
-        Matrix & operator*=(const Matrix & A);
-        Matrix operator*(Any a);
         Matrix & operator*=(Any a);
+        Matrix & operator*=(const Matrix & A);
+        Matrix & operator/=(Any a);
+        Matrix & operator+=(const Matrix & A);
+        Matrix & operator-=(const Matrix & A);
+        Matrix operator*(const Matrix & A);
+        Matrix operator*(Any a);
         template <class T, class G>
         friend Matrix<T> operator*(G a, const Matrix<T> & A);
-        void times(const Matrix & A,const Matrix & B);
         Matrix operator/(Any a);
-        Matrix & operator/=(Any a);
         Matrix operator+(const Matrix & A);
-        Matrix & operator+=(const Matrix & A);
         Matrix operator-(const Matrix & A);
-        Matrix & operator-=(const Matrix & A);
-        Matrix transpose();
         Matrix & operator=(const Matrix & A);
         bool operator!=(const Matrix & A);
         bool operator==(const Matrix & A);
-        //The inverse function uses the Gauss-Jordan Elimination
-        Matrix inv();
-        //i: the row needs to be swaped, j: the position the row i goes to
+        //The inverse function uses the Gauss-Jordan Elimination,it won't modify
+        //the original matrix and it returns the inverse of matrix A
+        static Matrix inv(const Matrix & A);
+        //The transpose function won't modify the original matrix and it returns
+        //the transpose of matrix A
+        static Matrix transpose(const Matrix & A);
+        void times(const Matrix & A,const Matrix & B);
+        //i: the row needs to be swaped, j: the position the row i goes to, this
+        //function modifies the original matrix
         void swapRow(int i, int j);
         //decimal: the numbers of decimal place
         void show(int decimal = 0);
@@ -353,12 +361,12 @@ Matrix<Any> & Matrix<Any>::operator-=(const Matrix<Any> & A){
 }
 
 template <class Any>
-Matrix<Any> Matrix<Any>::transpose(){
-    Matrix<Any> tmp(_column,_row);
+Matrix<Any> Matrix<Any>::transpose(const Matrix<Any> & A){
+    Matrix<Any> tmp(A._column,A._row);
 
-    for(int i=0;i<_row;i++)
-        for(int j=0;j<_column;j++)
-            tmp._entity[j][i] = _entity[i][j];
+    for(int i=0;i<A._row;i++)
+        for(int j=0;j<A._column;j++)
+            tmp._entity[j][i] = A._entity[i][j];
 
     return tmp;
 }
@@ -412,20 +420,20 @@ bool Matrix<Any>::operator==(const Matrix<Any> & A){
 }
 
 template <class Any>
-Matrix<Any> Matrix<Any>::inv(){
+Matrix<Any> Matrix<Any>::inv(const Matrix & A){
     //has to be a square matrix
-    if(_row != _column){
+    if(A._row != A._column){
         return Matrix<Any>();
     }
 
-    Matrix<Any> tmp(_row,_column,'I');
-    Matrix<Any> copy(*this);
+    Matrix<Any> tmp(A._row,A._column,'I');
+    Matrix<Any> copy(A);
 
     //set the pivot to be the largest element in that column
-    for(int i=0;i<_row-1;i++){
+    for(int i=0;i<A._row-1;i++){
         Any pivot = copy._entity[i][i];
         int row = i;
-        for(int j = i+1;j<_row;j++)
+        for(int j = i+1;j<A._row;j++)
             if(copy._entity[j][i] > pivot){
                 pivot = copy._entity[j][i];
                 row = j;
@@ -439,18 +447,18 @@ Matrix<Any> Matrix<Any>::inv(){
         }
     }
 
-    for(int i=0;i<_row;i++)
-        for(int j=0;j<_row;j++)
+    for(int i=0;i<A._row;i++)
+        for(int j=0;j<A._row;j++)
             if(i!=j){
                 Any backup = copy._entity[j][i];
-                for(int k=0;k<_column;k++){
+                for(int k=0;k<A._column;k++){
                     copy._entity[j][k] -= backup*copy._entity[i][k]/copy._entity[i][i];
                     tmp._entity[j][k] -= backup*tmp._entity[i][k]/copy._entity[i][i];
                 }
             }
 
-    for(int i=0;i<_row;i++)
-        for(int j=0;j<_column;j++){
+    for(int i=0;i<A._row;i++)
+        for(int j=0;j<A._column;j++){
             tmp._entity[i][j] /= copy._entity[i][i];
         }
 
