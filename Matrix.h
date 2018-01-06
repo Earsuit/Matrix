@@ -20,7 +20,7 @@
 
   Created by Yudi Ren, Jan 05, 2018.
   renyudicn@outlook.com
-  Version 0.2
+  Version 0.1
 */
 
 #ifndef MATRIX_H
@@ -67,7 +67,6 @@ class Matrix
         //The transpose function won't modify the original matrix and it returns
         //the transpose of matrix A
         static Matrix transpose(const Matrix & A);
-        void times(const Matrix & A,const Matrix & B);
         //i: the row needs to be swaped, j: the position the row i goes to, this
         //function modifies the original matrix
         void swapRow(int i, int j);
@@ -242,35 +241,6 @@ Matrix<Any> & Matrix<Any>::operator*=(Any a){
 template <class Any, class G>
 Matrix<Any> operator*(G a, const Matrix<Any> & A){
     return A*a;
-}
-
-template <class Any>
-void Matrix<Any>::times(const Matrix<Any> & A,const Matrix<Any> & B){
-    if(A._column == B._row){
-        if(A._row != _row || B._column != _column){
-            for(int i=0;i<_row;i++)
-                delete [] _entity[i];
-            delete [] _entity;
-
-            _row = A._row;
-            _column = B._column;
-
-            _entity = new Any*[_row];
-            for(int i=0;i<_row;i++)
-                _entity[i] = new Any[_column];
-        }
-
-        for(int i=0;i<A._row;i++)
-            for(int j=0;j<B._column;j++){
-                _entity[i][j] = 0;
-                for(int k=0;k<A._column;k++)
-                    _entity[i][j] += A._entity[i][k]*B._entity[k][j];
-                }
-    }else{
-        for(int i=0;i<_row;i++)
-            delete [] _entity[i];
-        delete [] _entity;
-    }
 }
 
 template <class Any>
