@@ -1,5 +1,5 @@
 /*
-  Matrix.h - Library for matrix calculation. Invalid dimension for calculation
+  Matrix.h - a free library for matrix calculation. Invalid dimension for calculation
   will lead to empty matrix, therefore, one should check whether the matrix is
   empty after calculation.
 
@@ -18,7 +18,7 @@
   Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
   type you used to create the matrix.
   
-  Feedback is welcome!
+  Feedback and contribution is welcome!
 
   Created by Yudi Ren, Jan 05, 2018.
   renyudicn@outlook.com
