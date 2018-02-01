@@ -17,6 +17,8 @@
   The transpose() and inv() functions are static functions, which should use
   Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
   type you used to create the matrix.
+  
+  Feedback is welcome!
 
   Created by Yudi Ren, Jan 05, 2018.
   renyudicn@outlook.com
