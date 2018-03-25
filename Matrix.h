@@ -17,7 +17,7 @@
   The transpose() and inv() functions are static functions, which should use
   Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
   type you used to create the matrix.
-  
+
   Feedback and contribution is welcome!
 
   Created by Yudi Ren, Jan 05, 2018.
@@ -451,21 +451,33 @@ void Matrix<Any>::swapRow(int i,int j){
 template <class Any>
 void Matrix<Any>::show(int decimal)
 {
-    if(decimal<0)
-        decimal = 0;
-
-	for(int i=0; i<_row; i++)
-	{
-	    Serial.print("[");
-	    for(int j=0; j<_column; j++)
-		{
-			Serial.print("  ");
-            Serial.print(_entity[i][j],decimal);
-            Serial.print(" ");
-		}
-		Serial.println("]");
-	}
-    Serial.println();
+    if(decimal<=0){
+        for(int i=0; i<_row; i++)
+    	{
+    	    Serial.print("[");
+    	    for(int j=0; j<_column; j++)
+    		{
+    			Serial.print("  ");
+                Serial.print(_entity[i][j]);
+                Serial.print(" ");
+    		}
+    		Serial.println("]");
+    	}
+        Serial.println();
+    }else{
+        for(int i=0; i<_row; i++)
+    	{
+    	    Serial.print("[");
+    	    for(int j=0; j<_column; j++)
+    		{
+    			Serial.print("  ");
+                Serial.print(_entity[i][j],decimal);
+                Serial.print(" ");
+    		}
+    		Serial.println("]");
+    	}
+        Serial.println();
+    }
 }
 
 template <class Any>
