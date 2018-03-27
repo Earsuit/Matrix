@@ -6,13 +6,6 @@
   =,==,!= as they want, but there is no definition for matrix division (like A/B).
   One should use the inverse function inv() instead.
 
-  To get a better performance, it's recommended to use /=, *=, -= and += if you
-  have A = A*B, A = A+B or A = A/b (b is a scalar).
-
-  However, using this library to do matrix calculation is not very
-  efficient, if you have a time-critical sketch, it would be better to write your
-  own code which is optimised for your project.
-
   The transpose() and inv() functions are static functions, which should use
   Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
   type you used to create the matrix.
@@ -20,7 +13,7 @@
   Feedback and contribution is welcome!
 
   Version 1.1
-  * Improve the processing speed
+  * Improved the processing speed
 
   ----------------
   Version 1.0
