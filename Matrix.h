@@ -14,7 +14,7 @@
   Feedback and contribution is welcome!
 
   Version 1.1
-  * Improved the processing speed, it becomes very efficient.
+  * Improved the processing speed, it becomes more efficient.
 
   ----------------
   Version 1.0
@@ -396,7 +396,7 @@ Matrix<Any>& Matrix<Any>::operator=(Matrix<Any> && A){
     A._column = 0;
     return *this;
 }
-//
+
 template <class Any>
 bool Matrix<Any>::operator!=(const Matrix<Any> & A){
     if(_row!=A._row || _column != A._column)
