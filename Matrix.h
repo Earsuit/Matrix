@@ -90,7 +90,7 @@ template <class Any>
 Matrix<Any>::Matrix(){
     _row = 0;
     _column = 0;
-    _entity = NULL;
+    _entity = nullptr;
 }
 
 template <class Any>
@@ -115,7 +115,9 @@ Matrix<Any>::Matrix(const Matrix<Any> & m){
     for(int i=0;i<_row;i++)
         _entity[i] = new Any[_column];
 
-    memcpy(_entity,m._entity,_row*_column*sizeof(Any));
+    int bytes = _column*sizeof(Any);
+    for(int i=0;i<_row;i++)
+        memcpy(_entity[i],m._entity[i],bytes);
 }
 
 template <class Any>
@@ -124,6 +126,8 @@ Matrix<Any>::Matrix(Matrix<Any> && m){
     _column = m._column;
     _entity = m._entity;
     m._entity = nullptr;
+    m._row = 0;
+    m._column = 0;
 }
 
 template <class Any>
@@ -157,9 +161,11 @@ Matrix<Any>::Matrix(int r,int c,char type){
                     for(int j=0;j<_column;j++)
                         _entity[i][j] = (i==j?1:0);
             }else{
-                for(int i=0;i<_row;i++)
-                    delete [] _entity[i];
-                delete [] _entity;
+                if(_entity != nullptr){
+                    for(int i=0;i<_row;i++)
+                        delete [] _entity[i];
+                    delete [] _entity;
+                }
             }
             break;
         default:
@@ -198,9 +204,11 @@ template <class Any>
 Matrix<Any> & Matrix<Any>::operator*=(const Matrix<Any> & A){
     //check if the dimension matches
     if(_column != A._row){
-        for(int i=0;i<_row;i++)
-            delete [] _entity[i];
-        delete [] _entity;
+        if(_entity != nullptr){
+            for(int i=0;i<_row;i++)
+                delete [] _entity[i];
+            delete [] _entity;
+        }
         return *this;
     }
 
@@ -360,7 +368,7 @@ Matrix<Any> Matrix<Any>::transpose(const Matrix<Any> & A){
 
 template <class Any>
 Matrix<Any>& Matrix<Any>::operator=(const Matrix<Any> & A){
-    if(_entity != NULL){
+    if(_entity != nullptr){
         for(int i=0;i<_row;i++)
             delete [] _entity[i];
         delete [] _entity;
@@ -382,10 +390,17 @@ Matrix<Any>& Matrix<Any>::operator=(const Matrix<Any> & A){
 
 template <class Any>
 Matrix<Any>& Matrix<Any>::operator=(Matrix<Any> && A){
+    if(_entity != nullptr){
+        for(int i=0;i<_row;i++)
+            delete [] _entity[i];
+        delete [] _entity;
+    }
     _row = A._row;
     _column = A._column;
     _entity = A._entity;
     A._entity = nullptr;
+    A._row = 0;
+    A._column = 0;
     return *this;
 }
 
@@ -507,7 +522,7 @@ void Matrix<Any>::show(int decimal)
 
 template <class Any>
 bool Matrix<Any>::notEmpty(){
-    if(_entity == NULL)
+    if(_entity == nullptr)
         return false;
     return true;
 }
