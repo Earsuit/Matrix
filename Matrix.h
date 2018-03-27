@@ -403,7 +403,7 @@ Matrix<Any>& Matrix<Any>::operator=(Matrix<Any> && A){
     A._column = 0;
     return *this;
 }
-
+//
 template <class Any>
 bool Matrix<Any>::operator!=(const Matrix<Any> & A){
     if(_row!=A._row || _column != A._column)
