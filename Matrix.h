@@ -20,9 +20,13 @@
 
   Feedback and contribution is welcome!
 
+  Version 1.1
+  * Improve the processing speed
+
+  ----------------
+  Version 1.0
   Created by Yudi Ren, Jan 05, 2018.
   renyudicn@outlook.com
-  Version 0.1
 */
 
 #ifndef MATRIX_H
@@ -40,6 +44,8 @@ class Matrix
         Matrix(int r,int c, int ini=0);
         //copy constructor, one can directly use the "=" operator like A=B
         Matrix(const Matrix & m);
+        //move constructor, improve the processing speed
+        Matrix(Matrix && m);
         //for a 2d array, you need to cast it to (Any*) type, see example for
         //more information
         Matrix(int r,int c,Any* m);
@@ -61,6 +67,8 @@ class Matrix
         Matrix operator+(const Matrix & A);
         Matrix operator-(const Matrix & A);
         Matrix & operator=(const Matrix & A);
+        //move assignment, improve the processing speed
+        Matrix & operator=(Matrix && A);
         bool operator!=(const Matrix & A);
         bool operator==(const Matrix & A);
         //The inverse function uses the Gauss-Jordan Elimination,it won't modify
@@ -107,9 +115,15 @@ Matrix<Any>::Matrix(const Matrix<Any> & m){
     for(int i=0;i<_row;i++)
         _entity[i] = new Any[_column];
 
-    for(int i=0;i<_row;i++)
-        for(int j=0;j<_column;j++)
-            _entity[i][j] = m._entity[i][j];
+    memcpy(_entity,m._entity,_row*_column*sizeof(Any));
+}
+
+template <class Any>
+Matrix<Any>::Matrix(Matrix<Any> && m){
+    _row = m._row;
+    _column = m._column;
+    _entity = m._entity;
+    m._entity = nullptr;
 }
 
 template <class Any>
@@ -121,10 +135,10 @@ Matrix<Any>::Matrix(int r,int c, Any* m){
     for(int i=0;i<r;i++)
         _entity[i] = new Any[_column];
 
+    int bytes = _column*sizeof(Any);
     for(int i=0;i<_row;i++)
-        for(int j=0;j<_column;j++){
-            _entity[i][j] = *((m+i*_column)+j);
-        }
+        memcpy(_entity[i],m+i*_column,bytes);
+
 }
 
 template <class Any>
@@ -157,9 +171,11 @@ Matrix<Any>::Matrix(int r,int c,char type){
 
 template <class Any>
 Matrix<Any>::~Matrix(){
-    for(int i=0;i<_row;i++)
-        delete [] _entity[i];
-    delete [] _entity;
+    if(_entity != nullptr){
+        for(int i=0;i<_row;i++)
+            delete [] _entity[i];
+        delete [] _entity;
+    }
 }
 
 template <class Any>
@@ -175,7 +191,7 @@ Matrix<Any> Matrix<Any>::operator*(const Matrix<Any> & A){
                 tmp._entity[i][j] += _entity[i][k]*A._entity[k][j];
         }
 
-    return Matrix(tmp);
+    return tmp;
 }
 
 template <class Any>
@@ -227,7 +243,7 @@ Matrix<Any> Matrix<Any>::operator*(Any a){
             tmp._entity[i][j] = _entity[i][j]*a;
         }
 
-    return Matrix(tmp);
+    return tmp;
 }
 
 template <class Any>
@@ -254,7 +270,7 @@ Matrix<Any> Matrix<Any>::operator/(Any a){
             tmp._entity[i][j] = _entity[i][j]/a;
         }
 
-    return Matrix(tmp);
+    return tmp;
 }
 
 template <class Any>
@@ -279,7 +295,7 @@ Matrix<Any> Matrix<Any>::operator+(const Matrix<Any> & A){
             tmp._entity[i][j] = _entity[i][j]+A._entity[i][j];
         }
 
-    return Matrix(tmp);
+    return tmp;
 }
 
 template <class Any>
@@ -311,7 +327,7 @@ Matrix<Any> Matrix<Any>::operator-(const Matrix<Any> & A){
             tmp._entity[i][j] = _entity[i][j]-A._entity[i][j];
         }
 
-    return Matrix(tmp);
+    return tmp;
 }
 
 template <class Any>
@@ -361,6 +377,15 @@ Matrix<Any>& Matrix<Any>::operator=(const Matrix<Any> & A){
         for(int j=0;j<_column;j++)
             _entity[i][j] = A._entity[i][j];
 
+    return *this;
+}
+
+template <class Any>
+Matrix<Any>& Matrix<Any>::operator=(Matrix<Any> && A){
+    _row = A._row;
+    _column = A._column;
+    _entity = A._entity;
+    A._entity = nullptr;
     return *this;
 }
 
