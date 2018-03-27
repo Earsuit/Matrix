@@ -13,7 +13,7 @@
   Feedback and contribution is welcome!
 
   Version 1.1
-  * Improved the processing speed
+  * Improved the processing speed, it becomes very efficient.
 
   ----------------
   Version 1.0
