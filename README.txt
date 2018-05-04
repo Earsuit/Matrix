@@ -10,6 +10,10 @@
   Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
   type you used to create the matrix.
 
+  The elements of the matrix are stored in a public member of the instance called "_entity",
+  which is a 2D array. For example, we have a 2 by 1 vector called A, one could use A._entity[1][0]
+  to get the second element.
+
   Feedback and contribution is welcome!
 
   Version 1.1
