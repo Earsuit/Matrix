@@ -14,6 +14,10 @@
   which is a 2D array. For example, we have a 2 by 1 vector called A, one could use 
   A._entity[1][0] to get the second element.
 
+  The show(int decimal) function can be used to visulise the matrix, where decimal specifies the decimal numbers.
+
+  Detailed description: https://playground.arduino.cc/Code/Matrix.
+
   Feedback and contribution is welcome!
 
   Version 1.2

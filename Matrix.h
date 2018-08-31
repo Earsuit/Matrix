@@ -11,6 +11,10 @@
   Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
   type you used to create the matrix.
 
+  The show(int decimal) function can be used to visulise the matrix, where decimal specifies the decimal numbers.
+
+  Detailed description: https://playground.arduino.cc/Code/Matrix.
+
   Feedback and contribution is welcome!
 
   Version 1.2
