@@ -17,7 +17,8 @@
   Feedback and contribution is welcome!
 
   Version 1.2
-  * Now it can perform mixed calculation with scalars.
+  * Now it can perform mixed calculation with scalars. 
+    But you need to ensure the dimension of the matrix is 1 for plus and minus.
 
   Version 1.1
   * Improved the processing speed, it becomes more efficient.
