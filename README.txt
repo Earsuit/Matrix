@@ -16,6 +16,9 @@
 
   Feedback and contribution is welcome!
 
+  Version 1.2
+  * Now it can perform mixed calculation with scalars.
+
   Version 1.1
   * Improved the processing speed, it becomes more efficient.
 

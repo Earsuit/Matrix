@@ -13,6 +13,9 @@
 
   Feedback and contribution is welcome!
 
+  Version 1.2
+  * Now it can perform mixed calculation with scalars.
+
   Version 1.1
   * Improved the processing speed, it becomes more efficient.
 
@@ -58,7 +61,16 @@ class Matrix
         friend Matrix<T> operator*(G a, const Matrix<T> & A);
         Matrix operator/(Any a);
         Matrix operator+(const Matrix & A);
+        Any operator+(Any a);
+
+        template <class T>
+        friend T operator+(T a, const Matrix<T> & A);
+        
         Matrix operator-(const Matrix & A);
+        Any operator-(Any a);
+        template <class T>
+        friend T operator-(T a, const Matrix<T> & A);
+
         Matrix & operator=(const Matrix & A);
         //move assignment, improve the processing speed
         Matrix & operator=(Matrix && A);
@@ -67,9 +79,11 @@ class Matrix
         //The inverse function uses the Gauss-Jordan Elimination,it won't modify
         //the original matrix and it returns the inverse of matrix A
         static Matrix inv(const Matrix & A);
+        static Any inv(Any a);
         //The transpose function won't modify the original matrix and it returns
         //the transpose of matrix A
         static Matrix transpose(const Matrix & A);
+        static Any transpose(Any a);
         //i: the row needs to be swaped, j: the position the row i goes to, this
         //function modifies the original matrix
         void swapRow(int i, int j);
@@ -180,7 +194,7 @@ Matrix<Any>::~Matrix(){
 template <class Any>
 Matrix<Any> Matrix<Any>::operator*(const Matrix<Any> & A){
     if(_column != A._row)
-        return Matrix();
+        Serial.println("Multiplication matrix dimension not match");
 
     Matrix<Any> tmp(_row,A._column);
 
@@ -287,7 +301,7 @@ Matrix<Any> & Matrix<Any>::operator/=(Any a){
 template <class Any>
 Matrix<Any> Matrix<Any>::operator+(const Matrix<Any> & A){
     if(_row != A._row || _column != A._column)
-        return Matrix();
+        Serial.println("Plus matrix dimension not match");
 
     Matrix<Any> tmp(_row,_column);
 
@@ -297,6 +311,22 @@ Matrix<Any> Matrix<Any>::operator+(const Matrix<Any> & A){
         }
 
     return tmp;
+}
+
+template <class Any>
+Any Matrix<Any>::operator+(Any a){
+    if(_row != 1 || _column != 1)
+        Serial.println("Plus scalar dimension not match");
+
+    return _entity[0][0]+a;
+}
+
+template <class T>
+T operator+(T a, const Matrix<T> & A){
+    if(A._row != 1 || A._column != 1)
+        Serial.println("Plus scalar dimension not match");
+        
+    return a+A._entity[0][0];
 }
 
 template <class Any>
@@ -319,7 +349,7 @@ Matrix<Any> & Matrix<Any>::operator+=(const Matrix<Any> & A){
 template <class Any>
 Matrix<Any> Matrix<Any>::operator-(const Matrix<Any> & A){
     if(_row != A._row || _column != A._column)
-        return Matrix();
+        Serial.println("Sub scalar dimension not match");
 
     Matrix<Any> tmp(_row,_column);
 
@@ -329,6 +359,22 @@ Matrix<Any> Matrix<Any>::operator-(const Matrix<Any> & A){
         }
 
     return tmp;
+}
+
+template <class Any>
+Any Matrix<Any>::operator-(Any a){
+    if(_row != 1 || _column != 1)
+        Serial.println("Sub scalar dimension not match");
+
+    return _entity[0][0]-a;
+}
+
+template <class Any>
+Any operator-(Any a, const Matrix<Any> & A){
+    if(A._row != 1 || A._column != 1)
+        Serial.println("Sub scalar dimension not match");
+        
+    return a-A._entity[0][0];
 }
 
 template <class Any>
@@ -427,7 +473,7 @@ template <class Any>
 Matrix<Any> Matrix<Any>::inv(const Matrix & A){
     //has to be a square matrix
     if(A._row != A._column){
-        return Matrix<Any>();
+        Serial.println("Inv Has to be a square matrix");
     }
 
     Matrix<Any> tmp(A._row,A._column,'I');
@@ -467,6 +513,11 @@ Matrix<Any> Matrix<Any>::inv(const Matrix & A){
         }
 
     return tmp;
+}
+
+template <class Any>
+Any Matrix<Any>::inv(Any a){
+    return 1.0/a;
 }
 
 template <class Any>
