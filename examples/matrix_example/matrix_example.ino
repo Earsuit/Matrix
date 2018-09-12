@@ -14,11 +14,16 @@ void setup() {
     Serial.println("C: ");
     C.show();
     Serial.println("A transpose: ");
+    // Transpose A
     Matrix<float>::transpose(A).show(4);
     Serial.println("A inverse: ");
+    // Inverse A
     Matrix<float>::inv(A).show(4);
     Serial.println("D: ");
     D.show();
+    // Access the first element of A
+    Serial.print("First element of A:");
+    Serial.println(A._entity[0][0]);
 }
 
 void loop() {
