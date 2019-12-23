@@ -1,5 +1,5 @@
 /*
-  Matrix.h - a free library for matrix calculation. Invalid dimension for calculation
+  Matrix.h - A free library for matrix calculation. Invalid dimension for calculation
   will lead to empty matrix, therefore, one should check whether the matrix is
   empty after calculation.
 
@@ -11,11 +11,18 @@
   Matrix<Type>::transpose() and Matrix<Type>::inv() format to call, Type is the
   type you used to create the matrix.
 
+  The elements of the matrix are easy to access. For example, we have a 2 by 1 vector called A, one could use 
+  A[1][0] to get the second element or A[1][0] to assign a value to it.
+
   The show(int decimal) function can be used to visulise the matrix, where decimal specifies the decimal numbers.
 
   Detailed description: https://playground.arduino.cc/Code/Matrix.
 
   Feedback and contribution is welcome!
+
+  Version 1.3
+  * Overloading operator [], so we can access the element by using A[][]. Because the internal data structure is a two 
+    dimensional array, we have to use A[*][0] or A[0][*] to access the element in a column or row matrix.
 
   Version 1.2
   * Now it can perform mixed calculation with scalars. 
@@ -26,6 +33,7 @@
 
   ----------------
   Version 1.0
+
   Created by Yudi Ren, Jan 05, 2018.
   renyudicn@outlook.com
 */
