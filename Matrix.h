@@ -68,6 +68,8 @@ class Matrix
         Matrix operator+(const Matrix & A);
         Any operator+(Any a);
 
+        Any* operator[](int index);
+
         template <class T>
         friend T operator+(T a, const Matrix<T> & A);
         
@@ -397,6 +399,11 @@ Matrix<Any> & Matrix<Any>::operator-=(const Matrix<Any> & A){
         }
 
     return *this;
+}
+
+template <class Any>
+Any* Matrix<Any>::operator[](int index){
+    return _entity[index];
 }
 
 template <class Any>
