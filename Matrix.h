@@ -70,8 +70,8 @@ class Matrix
         Matrix & operator-=(const Matrix & A);
         Matrix operator*(const Matrix & A);
         Matrix operator*(Any a);
-        template <class T, class G>
-        friend Matrix<T> operator*(G a, const Matrix<T> & A);
+        template <class T>
+        friend Matrix<T> operator*(T a, Matrix<T> & A);
         Matrix operator/(Any a);
         Matrix operator+(const Matrix & A);
         Any operator+(Any a);
@@ -286,8 +286,8 @@ Matrix<Any> & Matrix<Any>::operator*=(Any a){
     return *this;
 }
 
-template <class Any, class G>
-Matrix<Any> operator*(G a, const Matrix<Any> & A){
+template <class Any>
+Matrix<Any> operator*(Any a, Matrix<Any> & A){
     return A*a;
 }
 
